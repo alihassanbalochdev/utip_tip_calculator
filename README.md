@@ -1,17 +1,16 @@
 # utip
 
-A new Flutter project.
+A Tip & Split Calculator
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is designed that in this flutter application,
+We can first add the bill amount like (eg. $100),
+Then we add how many people are total like(eg. 4),
+After adding these we can see that it tell that how many each person give in bill,
 
-A few resources to get you started if this is your first Flutter project:
+If you want to add there is limit like from 10% to 50%
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+So,
+    That's about my project, This is my first self created project.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
