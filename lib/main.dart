@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:utip/Providers/ThemeProvider.dart';
 import 'package:utip/Providers/TipCalculatorModel.dart';
 import 'package:utip/Widgets/bill_amount_field.dart';
 import 'package:utip/Widgets/person_counter.dart';
@@ -9,8 +10,13 @@ import 'package:utip/Widgets/total_per_peson.dart';
 
 
 void main() {
-  runApp(ChangeNotifierProvider(create: (context) => TipCalculatorModel(),  
-  child: const MyApp()));
+  runApp(MultiProvider(providers: [
+ChangeNotifierProvider(create: (context) => TipCalculatorModel()),
+ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ],
+    child:   
+     const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'UTip App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -31,18 +38,17 @@ class MyApp extends StatelessWidget {
 
 class UTip extends StatefulWidget {
   const UTip({super.key});
-
   @override
   State<UTip> createState() => _UTipState();
 }
-
 class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
-        final model =Provider.of<TipCalculatorModel>(context);
-   
+    var theme = Theme.of(context);
+    final model = Provider.of<TipCalculatorModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context); // Now it's being used!
+
     // Add Style
-    final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium?.copyWith(
       color: theme.colorScheme.onPrimary,
     );
@@ -50,8 +56,22 @@ class _UTipState extends State<UTip> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('UTip App'),
+        actions: [
+          // Theme Toggle Button
+          IconButton(
+            icon: Icon(
+              themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            ),
+            onPressed: () {
+              // Ensure your ThemeProvider has a method named toggleTheme() 
+              // or similar to switch modes
+              themeProvider.toggleTheme(); 
+            },
+          ),
+        ],
       ),
       body: Column(
+        // ... rest of your body code
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TotalPerPerson(total: model.totalPerPerson, style: style, theme: theme),
@@ -110,6 +130,7 @@ class _UTipState extends State<UTip> {
     );
   }
 }
+
 
 
 
