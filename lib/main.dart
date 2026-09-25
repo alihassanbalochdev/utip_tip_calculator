@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:utip/Providers/TipCalculatorModel.dart';
 import 'package:utip/Widgets/bill_amount_field.dart';
 import 'package:utip/Widgets/person_counter.dart';
 import 'package:utip/Widgets/tip_row.dart';
 import 'package:utip/Widgets/tip_silder.dart';
 import 'package:utip/Widgets/total_per_peson.dart';
 
+
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(create: (context) => TipCalculatorModel(),  
+  child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -33,38 +37,11 @@ class UTip extends StatefulWidget {
 }
 
 class _UTipState extends State<UTip> {
-  int _personCount = 1;
- double _tipPercentage = 0.1;
- double _billTotal = 0.0;
-
- double totalPerPerson() {
-    final totalTip = _billTotal * _tipPercentage;
-    final total = _billTotal + totalTip;
-    return total / _personCount;
-  }
-
-  double totalTipAmount() {
-    return _billTotal * _tipPercentage;
-  }
-
-  // Method
-  void increment() {
-    setState(() {
-      _personCount = _personCount + 1;
-    });
-  }
-  void decrement() {
-    setState(() {
-      if (_personCount > 1) {
-        _personCount = _personCount - 1;
-      }
-    });
-  }
-  
   @override
   Widget build(BuildContext context) {
-    double total = totalPerPerson();
-    double totalTip = totalTipAmount();
+        final model =Provider.of<TipCalculatorModel>(context);
+   
+    // Add Style
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium?.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -77,7 +54,7 @@ class _UTipState extends State<UTip> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TotalPerPerson(total: total, style: style, theme: theme),
+          TotalPerPerson(total: model.totalPerPerson, style: style, theme: theme),
           // Form
           Padding(
             padding: const EdgeInsets.all(18.0),
@@ -93,29 +70,37 @@ class _UTipState extends State<UTip> {
               child: Column(
                 children: [
                   BillAmountField(
-                    billAmount: _billTotal.toString(), 
+                    billAmount: model.billTotal.toString(), 
                     onChanged: (String value) {
-                      setState(() {
-                        _billTotal = double.parse(value);
-                      }); 
+                      model.updateBillTotal(double.parse(value));
                    },),
                   // Split Bill Area
                   PersonCounter(
                     theme: theme,
-                    personCount: _personCount,
-                    ondecrement: decrement,
-                    onincrement: increment),
-               TipRow(theme: theme, totalTip: totalTip),
+                    personCount: model.personCount,
+                    ondecrement: () {
+                      if (model.personCount > 1){
+                          model.updatePersonCount(model.personCount - 1);
+                      }
+                    },
+                    onincrement: () {
+                        model.updatePersonCount(model.personCount + 1);
+                    }
+                    ),
+               TipRow(
+                theme: theme,
+                billTotal: model.billTotal,
+                percentage: model.tipPercentage,
+                ),
                   // slider
-                  Text('${(_tipPercentage * 100).round()} %', style: theme.textTheme.titleMedium),
+                  Text('${(model.tipPercentage * 100).round()} %', style: theme.textTheme.titleMedium),
                   // slider
                   TipSlider(
-                    tipPercentage: _tipPercentage,
+                    tipPercentage: model.tipPercentage,
                     onChanged: (double value) {
-                    setState(() {
-                      _tipPercentage = value;
-                    });
-                    },),
+                      model.updateTipPercentage(value);
+                    },
+                  ),
                 ],
               ),
             ),

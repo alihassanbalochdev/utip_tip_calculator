@@ -4,11 +4,13 @@ class TipRow extends StatelessWidget {
   const TipRow({
     super.key,
     required this.theme,
-    required this.totalTip,
+    required this.billTotal,
+    required this.percentage,
   });
 
   final ThemeData theme;
-  final double totalTip;
+  final double billTotal;
+  final double percentage;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,9 @@ class TipRow extends StatelessWidget {
      mainAxisAlignment: MainAxisAlignment.spaceBetween,
      children: [
       Text('Tip', style: theme.textTheme.titleMedium),
-      Text(totalTip.toStringAsFixed(2), style: theme.textTheme.titleMedium),
+      Text(
+        '\$${(billTotal * percentage).toStringAsFixed(2)}',
+         style: theme.textTheme.titleMedium),
         ],
        );
   }
