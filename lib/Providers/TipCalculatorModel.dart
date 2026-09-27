@@ -1,4 +1,4 @@
-
+// ignore_for_file: file_names
 import 'package:flutter/material.dart';
 class TipCalculatorModel with ChangeNotifier{
    int _personCount = 1;
@@ -16,7 +16,7 @@ class TipCalculatorModel with ChangeNotifier{
  }
 
  void updateTipPercentage(double tipPercentage){
-  _tipPercentage = tipPercentage;
+  _tipPercentage = tipPercentage; 
   notifyListeners();
  }
 

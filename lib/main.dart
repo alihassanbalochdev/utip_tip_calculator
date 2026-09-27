@@ -6,8 +6,8 @@ import 'package:utip/Widgets/bill_amount_field.dart';
 import 'package:utip/Widgets/person_counter.dart';
 import 'package:utip/Widgets/tip_row.dart';
 import 'package:utip/Widgets/tip_silder.dart';
+import 'package:utip/Widgets/toggle_theme_button.dart';
 import 'package:utip/Widgets/total_per_peson.dart';
-
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -24,13 +24,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       title: 'UTip App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: themeProvider.currentThem,
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      //   useMaterial3: true,
+      // ),
       home: const UTip(),
     );
   }
@@ -46,28 +48,17 @@ class _UTipState extends State<UTip> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     final model = Provider.of<TipCalculatorModel>(context);
-    final themeProvider = Provider.of<ThemeProvider>(context); // Now it's being used!
 
     // Add Style
     final style = theme.textTheme.displayMedium?.copyWith(
       color: theme.colorScheme.onPrimary,
     );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('UTip App'),
         actions: [
           // Theme Toggle Button
-          IconButton(
-            icon: Icon(
-              themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-            ),
-            onPressed: () {
-              // Ensure your ThemeProvider has a method named toggleTheme() 
-              // or similar to switch modes
-              themeProvider.toggleTheme(); 
-            },
-          ),
+          ToggleThemeButton(),
         ],
       ),
       body: Column(
@@ -130,10 +121,4 @@ class _UTipState extends State<UTip> {
     );
   }
 }
-
-
-
-
-
-
 
