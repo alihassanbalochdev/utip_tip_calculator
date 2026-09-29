@@ -62,7 +62,6 @@ class _UTipState extends State<UTip> {
         ],
       ),
       body: Column(
-        // ... rest of your body code
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TotalPerPerson(total: model.totalPerPerson, style: style, theme: theme),
